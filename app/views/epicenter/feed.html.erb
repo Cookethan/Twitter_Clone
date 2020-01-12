@@ -1,0 +1,27 @@
+<h1>@<%= current_user.username %>'s Twitter Feed</h1>
+<p>Here is what your "friends" are saying:</p>
+
+
+<div>
+    <%= form_for @tweet do |f| %>
+    <%= f.text_field :message, placeholder: 'new tweet' %>
+    <%= f.hidden_field :user_id, value: current_user.id %>
+    <%= f.hidden_field :avatar, value: current_user.avatar%>
+    <%= f.submit %>
+    <% end %>
+</div>
+
+<div class="card bg-dark text-white col-sm-6 col-sm-offset-3" style="background-color: #1c1c1c ; color: #ffffff">
+    <% @following_tweets.each do |tweet| %>
+        <div>
+        <div class="card-header">
+        <img src="<%= tweet.avatar %>" class="pull-left tweet_pic" >
+	    <p class="card-title">@<%= link_to tweet.user.username, show_user_path(id: tweet.user.id) %></p>
+        </div>
+        <div class="card-body">
+	    <p class="card-text"><%= tweet.message.html_safe %></p>
+        <p><%= time_ago_in_words(tweet.created_at) unless tweet.created_at.blank? %> ago</p>
+        </div>
+	</div>
+    <% end %>
+</div>
